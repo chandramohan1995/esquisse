@@ -106,7 +106,7 @@ dataGlobalEnvServer <- function(input, output, session, data = NULL, name = NULL
   
   observeEvent(input$data, {
     req(input$data)
-    imported <- try(dbReadTable(pool,input$data), silent = TRUE)
+    imported <- try(dbGetQuery(pool, 'SELECT * FROM zipline_excel.project_file_upload'), silent = TRUE)
     if ("try-error" %in% class(imported) || NROW(imported) < 1) {
       toggleInput(inputId = ns("validate"), enable = FALSE)
       removeUI(selector = jns("result-import"))
