@@ -42,8 +42,8 @@ dataGlobalEnvUI <- function(id, dismissOnValidate = TRUE, selectVars = TRUE, coe
       inputId = ns("data"),
       label = "Choose a data.frame :",
       choices = dfs, width = "100%",
-      options = list(title = "List of data.frame..."),
-      choicesOpt = list(subtext = info_dfs)
+      options = list(title = "List of data.frame...")
+     # choicesOpt = list(subtext = info_dfs)
     ),
     
     tags$div(
