@@ -20,13 +20,13 @@ dataGlobalEnvUI <- function(id, dismissOnValidate = TRUE, selectVars = TRUE, coe
   # List of data.frame
   dfs <- search_obj(what = "data.frame")
   if (is.null(dfs)) {
-    dfs <- data(package = "ggplot2", envir = environment())$results[, "Item"]
+    dfs <- dbListTables(pool)
   }
   
   info_dfs <- lapply(
     X = dfs,
     FUN = function(x) {
-      tmp <- get_df(x)
+      tmp <- dbReadTable(pool,x)
       sprintf("%d obs. of  %d variables", nrow(tmp), ncol(tmp))
     }
   )
@@ -106,7 +106,7 @@ dataGlobalEnvServer <- function(input, output, session, data = NULL, name = NULL
   
   observeEvent(input$data, {
     req(input$data)
-    imported <- try(get_df(input$data), silent = TRUE)
+    imported <- try(try(dbReadTable(pool,input$data), silent = TRUE)
     if ("try-error" %in% class(imported) || NROW(imported) < 1) {
       toggleInput(inputId = ns("validate"), enable = FALSE)
       removeUI(selector = jns("result-import"))
