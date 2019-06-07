@@ -23,14 +23,14 @@ dataGlobalEnvUI <- function(id, dismissOnValidate = TRUE, selectVars = TRUE, coe
     dfs <- dbListTables(pool)
   }
   
-  info_dfs <- lapply(
-    X = dfs,
-    FUN = function(x) {
-      tmp <- dbReadTable(pool,x)
-      sprintf("%d obs. of  %d variables", nrow(tmp), ncol(tmp))
-    }
-  )
-  info_dfs <- unlist(info_dfs)
+ # info_dfs <- lapply(
+  #  X = dfs,
+   # FUN = function(x) {
+     # tmp <- dbReadTable(pool,x)
+      #sprintf("%d obs. of  %d variables", nrow(tmp), ncol(tmp))
+   # }
+#  )
+  #info_dfs <- unlist(info_dfs)
   
   tagList(
     useShinyUtils(),
@@ -106,7 +106,7 @@ dataGlobalEnvServer <- function(input, output, session, data = NULL, name = NULL
   
   observeEvent(input$data, {
     req(input$data)
-    imported <- try(dbGetQuery(pool, 'SELECT * FROM zipline_excel.project_file_upload'), silent = TRUE)
+    imported <- try(dbReadTable(pool,input$data), silent = TRUE)
     if ("try-error" %in% class(imported) || NROW(imported) < 1) {
       toggleInput(inputId = ns("validate"), enable = FALSE)
       removeUI(selector = jns("result-import"))
