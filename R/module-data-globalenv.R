@@ -20,7 +20,8 @@ dataGlobalEnvUI <- function(id, dismissOnValidate = TRUE, selectVars = TRUE, coe
   # List of data.frame
   dfs <- search_obj(what = "data.frame")
   if (is.null(dfs)) {
-    dfs <- dbListTables(pool)
+    dfs <- dbGetQuery(pool,"SELECT table_name FROM information_schema.tables
+                   WHERE table_schema='public'")
   }
   
  # info_dfs <- lapply(
